@@ -3,9 +3,10 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const TwitterStrategy = require("passport-twitter").Strategy;
 const User = require("../models/User");
 
-const BACKEND_URL = "https://two048-backend-o72a.onrender.com"; // ✅ your live backend URL
+// 🌐 LIVE BACKEND URL
+const BACKEND_URL = "https://two048-backend-o72a.onrender.com";
 
-// ✅ Google OAuth Strategy
+// 🔐 Google OAuth Strategy
 passport.use(
   new GoogleStrategy(
     {
@@ -29,14 +30,14 @@ passport.use(
 
         done(null, user);
       } catch (err) {
-        console.error("❌ Google OAuth Error:", err);
+        console.error("❌ Google Strategy Error:", err);
         done(err, null);
       }
     }
   )
 );
 
-// ✅ Twitter OAuth Strategy
+// 🔐 Twitter (X) OAuth Strategy
 passport.use(
   new TwitterStrategy(
     {
@@ -60,14 +61,14 @@ passport.use(
 
         done(null, user);
       } catch (err) {
-        console.error("❌ Twitter OAuth Error:", err);
+        console.error("❌ Twitter Strategy Error:", err);
         done(err, null);
       }
     }
   )
 );
 
-// ✅ Required for Passport session handling (optional for JWT auth)
+// 🧠 Passport session handlers (required if using session)
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
