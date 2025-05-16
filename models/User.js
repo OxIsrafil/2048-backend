@@ -47,12 +47,18 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required: true
       },
+  
       date: {
         type: Date,
         default: Date.now
       }
     }
   ],
+
+  bestScore: {
+  type: Number,
+  default: 0
+},
 
   createdAt: {
     type: Date,
