@@ -3,7 +3,6 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const TwitterStrategy = require("passport-twitter").Strategy;
 const User = require("../models/User");
 
-// 🌐 LIVE BACKEND URL
 const BACKEND_URL = "https://two048-backend-o72a.onrender.com";
 
 // 🔐 Google OAuth Strategy
@@ -22,6 +21,7 @@ passport.use(
           user = new User({
             name: profile.displayName,
             email: profile.emails?.[0]?.value || "",
+            avatar: profile.photos?.[0]?.value || "",
             googleId: profile.id,
             provider: "google",
           });
@@ -37,7 +37,7 @@ passport.use(
   )
 );
 
-// 🔐 Twitter (X) OAuth Strategy
+// 🔐 Twitter OAuth Strategy
 passport.use(
   new TwitterStrategy(
     {
@@ -51,11 +51,17 @@ passport.use(
         let user = await User.findOne({ twitterId: profile.id });
 
         if (!user) {
+          const emailFallback = `${profile.username}@twitter.com`;
+          const avatar = profile.photos?.[0]?.value || "";
+
           user = new User({
-            name: profile.displayName,
+            name: profile.displayName || profile.username,
             twitterId: profile.id,
+            email: emailFallback,
+            avatar,
             provider: "twitter",
           });
+
           await user.save();
         }
 
@@ -68,7 +74,7 @@ passport.use(
   )
 );
 
-// 🧠 Passport session handlers (required if using session)
+// Optional if using session:
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
